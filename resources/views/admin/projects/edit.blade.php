@@ -37,7 +37,7 @@
             <div class="mb-3">
                 <label for="type_id" class="form-label">Types</label>
                 <select class="form-select form-select-md" name="type_id" id="type_id">
-                    <option selected>None</option>
+                    <option value="" selected>None</option>
                     @foreach ($types as $type)
                         @if ($project->type)
                             <option value="{{ $type->id }}"
@@ -45,6 +45,29 @@
                             </option>
                         @endif
                     @endforeach
+                </select>
+            </div>
+            <div class="mb-3 ms-5">
+                <label for="technologies" class="form-label">Technologies</label>
+                <select multiple class="form-select form-select-md" name="technologies[]" id="technologies">
+                    <option value="" disabled>Select a technology</option>
+                    @forelse($technologies as $technology)
+                        @if ($errors->any())
+                            <option value="{{ $technology->id }}"
+                                {{ in_array($technology->id, old('technologies', [])) ? 'selected' : '' }}>
+                                {{ $technology->name }}
+                            </option>
+                        @elseif(!$project->technologies->isEmpty())
+                            <option
+                                value="{{ $technology->id }}"{{ $project->technologies->contains($technology->id) ? 'selected' : '' }}>
+                                {{ $technology->name }}
+                            </option>
+                        @else
+                            <option value="{{ $technology->id }}">{{ $technology->name }}</option>
+                        @endif
+                    @empty
+                        This item has no technologies
+                    @endforelse
                 </select>
             </div>
         </div>

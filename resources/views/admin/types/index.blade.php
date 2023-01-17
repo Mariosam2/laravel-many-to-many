@@ -73,9 +73,9 @@
                                                 <div class="input-group">
                                                     <input type="text" name="name" id="{{ 'name' . $type->id }}"
                                                         value="{{ $type->name }}"
-                                                        class="form-control @error('name' . $type->id) is-invalid @enderror">
-                                                    @error('name' . $type->id)
-                                                        <p class="error">{{ $errors->get('name' . $type->id) }}
+                                                        class="form-control @error('name', "update-$type->id") is-invalid @enderror">
+                                                    @error('name', "update-$type->id")
+                                                        <p class="error">ERRORE
                                                         </p>
                                                     @enderror
                                                     <button type="submit"
