@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProjectStoreRequest;
 use App\Http\Requests\ProjectUpdateRequest;
 use App\Models\Project;
+use App\Models\Technology;
 use App\Models\Type;
 use Illuminate\Support\Facades\Storage;
 use Termwind\Components\Span;
@@ -31,7 +32,8 @@ class ProjectController extends Controller
     public function create()
     {
         $types = Type::all();
-        return view('admin.projects.create', compact('types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('types', 'technologies'));
     }
 
     /**
@@ -42,6 +44,7 @@ class ProjectController extends Controller
      */
     public function store(ProjectStoreRequest $request)
     {
+        //dd($request);
         $val_data = $request->validated();
         //dd($val_data);
         if ($request->hasFile('img')) {
@@ -49,9 +52,17 @@ class ProjectController extends Controller
             $val_data['img'] = $img_path;
         }
 
-        $project = $val_data;
-        $val_data = Project::make($val_data)->getProjectWithSlug($val_data['title'])->save();
-        return to_route('admin.projects.index')->with('storeMsg', $project['title']);
+
+        $project = Project::make($val_data)->getProjectWithSlug($val_data['title']);
+        dd($project);
+        if ($request->has('technologies')) {
+            $project->technologies()->attach($val_data['technologies']);
+        }
+
+        $project->save();
+
+
+        return to_route('admin.projects.index')->with('storeMsg', $project->title);
     }
 
     /**
