@@ -112,7 +112,9 @@ class ProjectController extends Controller
         }
         //dd($val_data);
         $project->getProjectWithSlug($val_data['title'])->update($val_data);
-        $project->technologies()->sync($val_data['technologies']);
+        if ($request->has('technologies')) {
+            $project->technologies()->sync($val_data['technologies']);
+        }
         return to_route('admin.projects.index')->with('updateMsg', $project->title);
     }
 

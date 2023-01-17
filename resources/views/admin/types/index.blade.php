@@ -13,7 +13,7 @@
                     <div class="mb-3">
                         <div class="input-group mb-3">
                             <input type="text" name="name" id="name"
-                                class="form-control @error('name') is-invalid @enderror">
+                                class="form-control @error('name', 'store') is-invalid @enderror">
                             <button type="submit"
                                 class="input-group-text btn btn-dark rounded-end"id="inputGroup-sizing-default">Add
                                 <i class="fa-solid fa-plus ms-2"></i>
@@ -21,6 +21,15 @@
                         </div>
                     </div>
                 </form>
+                @if ($errors->store->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->store->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
             <div class="col-12 col-xxl-7">
                 @if (Session::has('storeMsg'))
@@ -36,15 +45,7 @@
                         <strong>{{ Session::get('deleteMsg') }}</strong> deleted succesfully
                     </div>
                 @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+
                 <div class="table-responsive">
                     <table
                         class="table table-striped
@@ -71,13 +72,9 @@
                                             @csrf
                                             <div class="py-2">
                                                 <div class="input-group">
-                                                    <input type="text" name="name" id="{{ 'name' . $type->id }}"
+                                                    <input type="text" name="name" id="{{ 'name-' . $type->id }}"
                                                         value="{{ $type->name }}"
-                                                        class="form-control @error('name', "update-$type->id") is-invalid @enderror">
-                                                    @error('name', "update-$type->id")
-                                                        <p class="error">ERRORE
-                                                        </p>
-                                                    @enderror
+                                                        class="form-control @error('name', $type->slug) is-invalid @enderror">
                                                     <button type="submit"
                                                         class="input-group-text btn btn-secondary rounded-end"id="inputGroup-sizing-default">Edit
                                                         <i class="fa-regular fa-pen-to-square ms-2"></i>
@@ -86,16 +83,26 @@
                                             </div>
 
                                         </form>
+                                        @if ($errors->getBag($type->slug)->any())
+                                            <div class="alert alert-danger m-0 p-2">
+                                                <ul class="m-0">
+                                                    @foreach ($errors->getBag($type->slug)->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
                                     </td>
                                     <td class="pe-5">{{ $type->slug }}</td>
-                                    <td class="d-flex justify-content-center">
+                                    <td>
                                         <form action="{{ route('admin.types.destroy', $type->slug) }}"
-                                            class="m-2 bg-danger rounded-2" method="post">
+                                            class="p-5 rounded-2" method="post">
                                             @method('DELETE')
                                             @csrf
                                             <!-- Modal trigger button -->
-                                            <button type="button" class="btn p-3 py-2 text-white" data-bs-toggle="modal"
-                                                data-bs-target="#modal{{ $type->id }}">
+                                            <button type="button"
+                                                class="btn p-3 py-2 text-white w-100 bg-danger text-align-center"
+                                                data-bs-toggle="modal" data-bs-target="#modal{{ $type->id }}">
                                                 <i class="fa-solid fa-trash"></i>
                                             </button>
 

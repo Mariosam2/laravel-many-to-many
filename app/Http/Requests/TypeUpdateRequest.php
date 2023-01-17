@@ -7,6 +7,13 @@ use Illuminate\Validation\Rule;
 
 class TypeUpdateRequest extends FormRequest
 {
+    protected $errorBag;
+    //override del metodo nella classe form request per generare dinamicamente gli error bag dei form (penso sia così sono andato a tentativi)
+    public function prepareForValidation()
+    {
+        $this->errorBag = $this->route('type')->slug;
+        //dd($this->route('type')->id);
+    }
     /**
      * Determine if the user is authorized to make this request.
      *
