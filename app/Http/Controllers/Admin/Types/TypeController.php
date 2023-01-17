@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Types;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TypeStoreRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\TypeUpdateRequest;
 use App\Models\Type;
@@ -36,22 +37,9 @@ class TypeController extends Controller
      * @param  \App\Http\Requests\TypeStoreRequest $request
      * @return \Illuminate\Http\Response
      */
-    // public function store(TypeStoreRequest $request)
-    // {
-    //     $val_data = $request->validated();
-    //     $type = $val_data;
-    //     Type::make($val_data)->getTypeWithSlug($val_data['name'])->save();
-    //     return to_route('admin.types.index')->with('storeMsg', $type['name']);
-    // }
-
-    public function store(Request $request)
+    public function store(TypeStoreRequest $request)
     {
-        $val_data = $request->validate(
-
-            [
-                'name' => ['required', 'unique:types', 'max:50']
-            ]
-        );
+        $val_data = $request->validated();
         $type = $val_data;
         Type::make($val_data)->getTypeWithSlug($val_data['name'])->save();
         return to_route('admin.types.index')->with('storeMsg', $type['name']);
@@ -86,15 +74,13 @@ class TypeController extends Controller
      * @param  \App\Models\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Type $type)
+    public function update(TypeUpdateRequest $request, Type $type)
     {
-        $val_data = $request->validateWithBag(
-            "update-" . $type->id,
-            [
-                'name' => ['required', 'unique:types', 'max:50']
-            ]
-        );
-
+        //dd($request);
+        //dd($type->id);
+        $request->prepareForValidation();
+        //dd($request);
+        $val_data = $request->validated();
         //dd($val_data);
         $type->getTypeWithSlug($val_data['name'])->update($val_data);
         return to_route('admin.types.index')->with('updateMsg', $type->name);
