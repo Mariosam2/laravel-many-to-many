@@ -54,12 +54,13 @@ class ProjectController extends Controller
 
 
         $project = Project::make($val_data)->getProjectWithSlug($val_data['title']);
-        dd($project);
+        //dd($project);
+        $project->save();
+
         if ($request->has('technologies')) {
             $project->technologies()->attach($val_data['technologies']);
         }
 
-        $project->save();
 
 
         return to_route('admin.projects.index')->with('storeMsg', $project->title);
@@ -87,7 +88,8 @@ class ProjectController extends Controller
     public function edit(Project $project)
     {
         $types = Type::all();
-        return view('admin.projects.edit', compact('project', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.edit', compact('project', 'types', 'technologies'));
     }
 
     /**
@@ -110,6 +112,7 @@ class ProjectController extends Controller
         }
         //dd($val_data);
         $project->getProjectWithSlug($val_data['title'])->update($val_data);
+        $project->technologies()->sync($val_data['technologies']);
         return to_route('admin.projects.index')->with('updateMsg', $project->title);
     }
 
