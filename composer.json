@@ -11,8 +11,7 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "pacificdev/laravel_9_preset": "dev-main",
-        "xvladqt/faker-lorem-flickr": "^1.0"
+        "pacificdev/laravel_9_preset": "dev-main"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
