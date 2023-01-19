@@ -78,7 +78,7 @@ class TypeController extends Controller
     {
         //dd($request);
         //dd($type->id);
-        $request->prepareForValidation();
+        //$request->prepareForValidation();
         //dd($request);
         $val_data = $request->validated();
         //dd($val_data);

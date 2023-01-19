@@ -49,14 +49,10 @@
                 <select multiple class="form-select form-select-md" name="technologies[]" id="technologies">
                     <option value="" disabled>Select a technology</option>
                     @forelse($technologies as $technology)
-                        @if ($errors->any())
-                            <option value="{{ $technology->id }}"
-                                {{ in_array($technology->id, old('technologies', [])) ? 'selected' : '' }}>
-                                {{ $technology->name }}
-                            </option>
-                        @else
-                            <option value="{{ $technology->id }}">{{ $technology->name }}</option>
-                        @endif
+                        <option value="{{ $technology->id }}"
+                            {{ in_array($technology->id, old('technologies', [])) ? 'selected' : '' }}>
+                            {{ $technology->name }}
+                        </option>
                     @empty
                         No Technologies in the system...
                     @endforelse
